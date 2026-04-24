@@ -2,6 +2,10 @@ import { useState } from "react";
 import { analyzeTeam } from "../api/teamApi";
 import { fetchPokemonByName } from "../api/pokemonApi";
 import RecommendationList from "../components/RecommendationList";
+import DefensiveAnalysis from "../components/DefensiveAnalysis";
+import OffensiveCoverage from "../components/OffensiveCoverage";
+import TeamList from "../components/TeamList";
+import PokemonSearch from "../components/PokemonSearch";
 
 function TeamBuilder() {
   const [team, setTeam] = useState([]);
@@ -73,72 +77,41 @@ function TeamBuilder() {
   }
 
   return (
-    <main style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
+    <main
+      style={{
+        maxWidth: "900px",
+        margin: "0 auto",
+        padding: "2rem",
+        fontFamily: "Arial, sans-serif"
+      }}
+    >
       <h1>Pokémon Team Optimiser</h1>
 
-      <form onSubmit={handleAddPokemon}>
-        <input
-          value={searchTerm}
-          onChange={(event) => setSearchTerm(event.target.value)}
-          placeholder="Search Pokémon e.g. pikachu"
-          style={{ padding: "0.6rem", marginRight: "0.5rem" }}
-        />
-
-        <button type="submit" disabled={loadingPokemon}>
-          {loadingPokemon ? "Adding..." : "Add Pokémon"}
-        </button>
-      </form>
+      <PokemonSearch
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        onAddPokemon={handleAddPokemon}
+        loadingPokemon={loadingPokemon}
+      />
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      <section style={{ marginTop: "2rem" }}>
+      <section style={{ marginTop: "2.5rem" }}>
         <h2>Current Team ({team.length}/6)</h2>
 
-        {team.length === 0 && <p>No Pokémon added yet.</p>}
+        <TeamList team={team} onRemovePokemon={handleRemovePokemon} />
 
-        <ul>
-          {team.map((pokemon) => (
-            <li key={pokemon.id} style={{ marginBottom: "1rem" }}>
-              {pokemon.sprite && (
-                <img
-                  src={pokemon.sprite}
-                  alt={pokemon.name}
-                  style={{ verticalAlign: "middle", marginRight: "0.5rem" }}
-                />
-              )}
-
-              <strong>{pokemon.name}</strong> — {pokemon.types.join(", ")}
-
-              <button
-                onClick={() => handleRemovePokemon(pokemon.id)}
-                style={{ marginLeft: "1rem" }}
-              >
-                Remove
-              </button>
-            </li>
-          ))}
-        </ul>
-
-        <button onClick={handleAnalyzeTeam} disabled={loadingAnalysis}>
+        <button onClick={handleAnalyzeTeam} disabled={loadingAnalysis} style={{padding: "0.6rem 1rem", borderRadius: "6px", border: "none", background: "#333", color: "white", cursor: "pointer"}}>
           {loadingAnalysis ? "Analysing..." : "Analyse Team"}
         </button>
       </section>
 
       {analysisResult && (
-        <section style={{ marginTop: "2rem" }}>
+        <section style={{ marginTop: "2.5rem" }}>
           <RecommendationList recommendations={analysisResult.recommendations} />
+          <DefensiveAnalysis defensiveAnalysis={analysisResult.defensiveAnalysis} />
+          <OffensiveCoverage offensiveCoverage={analysisResult.offensiveCoverage} />
 
-          <h2>Raw Analysis</h2>
-          <pre
-            style={{
-              background: "#f3f3f3",
-              padding: "1rem",
-              borderRadius: "8px",
-              overflowX: "auto"
-            }}
-          >
-            {JSON.stringify(analysisResult, null, 2)}
-          </pre>
         </section>
       )}
     </main>
