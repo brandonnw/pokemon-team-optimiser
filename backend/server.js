@@ -1,21 +1,19 @@
 import express from "express";
 import cors from "cors";
+import teamRoutes from "./routes/teamRoutes.js";
 
 const app = express();
-const PORT = 5000;
+const PORT = 3001;
 
-// middleware
 app.use(cors());
 app.use(express.json());
 
-// test route
 app.get("/api/health", (req, res) => {
   res.json({ message: "Server is running" });
 });
 
 app.use("/api/team", teamRoutes);
 
-// start server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
