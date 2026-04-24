@@ -1,7 +1,11 @@
-function RecommendationList({ recommendations }) {
+import AiSummaryCard from "./AiSummaryCard";
+
+function RecommendationList({ recommendations, aiSummary }) {
   return (
     <section className="card">
       <h2>Recommendations</h2>
+
+      <AiSummaryCard summary={aiSummary} />
 
       {!recommendations || recommendations.length === 0 ? (
         <p className="empty-text">No major issues found. Your team looks balanced.</p>

@@ -6,6 +6,7 @@ import TeamList from "../components/TeamList";
 import RecommendationList from "../components/RecommendationList";
 import DefensiveAnalysis from "../components/DefensiveAnalysis";
 import OffensiveCoverage from "../components/OffensiveCoverage";
+import AiSummaryCard from "../components/AiSummaryCard";
 
 function TeamBuilder() {
   const [team, setTeam] = useState([]);
@@ -13,6 +14,7 @@ function TeamBuilder() {
   const [analysisResult, setAnalysisResult] = useState(null);
   const [loadingPokemon, setLoadingPokemon] = useState(false);
   const [loadingAnalysis, setLoadingAnalysis] = useState(false);
+  const [aiSummary, setAiSummary] = useState(null);
   const [error, setError] = useState("");
 
   async function handleAddPokemon(event) {
@@ -39,6 +41,7 @@ function TeamBuilder() {
       setTeam([...team, pokemon]);
       setSearchTerm("");
       setAnalysisResult(null);
+      setAiSummary(null);
     } catch (error) {
       setError("Could not find that Pokémon. Try names like pikachu or charizard.");
     } finally {
@@ -49,6 +52,7 @@ function TeamBuilder() {
   function handleRemovePokemon(id) {
     setTeam(team.filter((pokemon) => pokemon.id !== id));
     setAnalysisResult(null);
+    setAiSummary(null);
   }
 
   async function handleAnalyzeTeam() {
@@ -68,6 +72,7 @@ function TeamBuilder() {
 
       const data = await analyzeTeam(cleanTeam);
       setAnalysisResult(data.analysis);
+      setAiSummary(data.aiSummary);
     } catch (error) {
       console.error(error);
       setError("Failed to analyse team.");
@@ -79,7 +84,7 @@ function TeamBuilder() {
   return (
     <main className="app-container">
       <section className="hero">
-        <div className="hero-badge">Type Matchup Engine</div>
+        <div className="hero-badge">Battle Balance Dashboard</div>
         <h1>Build smarter Pokémon teams with data-driven analysis.</h1>
         <p>
           Search Pokémon, build a team of up to six, and analyse defensive weaknesses,
@@ -117,7 +122,10 @@ function TeamBuilder() {
       {analysisResult && (
         <>
           <section className="grid">
-            <RecommendationList recommendations={analysisResult.recommendations} />
+            <RecommendationList
+              recommendations={analysisResult.recommendations}
+              aiSummary={aiSummary}
+            />
 
             <OffensiveCoverage offensiveCoverage={analysisResult.offensiveCoverage} />
           </section>
