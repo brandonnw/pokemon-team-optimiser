@@ -13,6 +13,8 @@ app.get("/api/health", (req, res) => {
   res.json({ message: "Server is running" });
 });
 
+app.use("/api/team", teamRoutes);
+
 // start server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
