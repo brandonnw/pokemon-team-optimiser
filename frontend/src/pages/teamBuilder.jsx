@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { analyzeTeam } from "../api/teamApi";
 import { fetchPokemonByName } from "../api/pokemonApi";
+import RecommendationList from "../components/RecommendationList";
 
 function TeamBuilder() {
   const [team, setTeam] = useState([]);
@@ -125,21 +126,7 @@ function TeamBuilder() {
 
       {analysisResult && (
         <section style={{ marginTop: "2rem" }}>
-          <h2>Recommendations</h2>
-
-          {analysisResult.recommendations.length === 0 ? (
-            <p>No major issues found.</p>
-          ) : (
-            <ul>
-              {analysisResult.recommendations.map((recommendation, index) => (
-                <li key={index}>
-                  <strong>{recommendation.issue}</strong>
-                  <br />
-                  {recommendation.suggestion}
-                </li>
-              ))}
-            </ul>
-          )}
+          <RecommendationList recommendations={analysisResult.recommendations} />
 
           <h2>Raw Analysis</h2>
           <pre
