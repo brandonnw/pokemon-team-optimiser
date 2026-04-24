@@ -1,4 +1,4 @@
-import TeamBuilder from "./pages/teamBuilder";
+import TeamBuilder from "./pages/TeamBuilder";
 
 function App() {
   return <TeamBuilder />;
