@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { analyzeTeam } from "../api/teamApi";
 import { fetchPokemonByName } from "../api/pokemonApi";
+import PokemonSearch from "../components/PokemonSearch";
+import TeamList from "../components/TeamList";
 import RecommendationList from "../components/RecommendationList";
 import DefensiveAnalysis from "../components/DefensiveAnalysis";
 import OffensiveCoverage from "../components/OffensiveCoverage";
-import TeamList from "../components/TeamList";
-import PokemonSearch from "../components/PokemonSearch";
 
 function TeamBuilder() {
   const [team, setTeam] = useState([]);
@@ -77,42 +77,53 @@ function TeamBuilder() {
   }
 
   return (
-    <main
-      style={{
-        maxWidth: "900px",
-        margin: "0 auto",
-        padding: "2rem",
-        fontFamily: "Arial, sans-serif"
-      }}
-    >
-      <h1>Pokémon Team Optimiser</h1>
+    <main className="app-container">
+      <section className="hero">
+        <div className="hero-badge">Type Matchup Engine</div>
+        <h1>Build smarter Pokémon teams with data-driven analysis.</h1>
+        <p>
+          Search Pokémon, build a team of up to six, and analyse defensive weaknesses,
+          resistances, immunities, and offensive coverage in one clean dashboard.
+        </p>
+      </section>
 
-      <PokemonSearch
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        onAddPokemon={handleAddPokemon}
-        loadingPokemon={loadingPokemon}
-      />
+      <section className="card">
+        <h2>Add Pokémon</h2>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        <PokemonSearch
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          onAddPokemon={handleAddPokemon}
+          loadingPokemon={loadingPokemon}
+        />
 
-      <section style={{ marginTop: "2.5rem" }}>
+        {error && <div className="error-box">{error}</div>}
+      </section>
+
+      <section className="card">
         <h2>Current Team ({team.length}/6)</h2>
 
         <TeamList team={team} onRemovePokemon={handleRemovePokemon} />
 
-        <button onClick={handleAnalyzeTeam} disabled={loadingAnalysis} style={{padding: "0.6rem 1rem", borderRadius: "6px", border: "none", background: "#333", color: "white", cursor: "pointer"}}>
+        <button
+          className="button"
+          onClick={handleAnalyzeTeam}
+          disabled={loadingAnalysis}
+        >
           {loadingAnalysis ? "Analysing..." : "Analyse Team"}
         </button>
       </section>
 
       {analysisResult && (
-        <section style={{ marginTop: "2.5rem" }}>
-          <RecommendationList recommendations={analysisResult.recommendations} />
-          <DefensiveAnalysis defensiveAnalysis={analysisResult.defensiveAnalysis} />
-          <OffensiveCoverage offensiveCoverage={analysisResult.offensiveCoverage} />
+        <>
+          <section className="grid">
+            <RecommendationList recommendations={analysisResult.recommendations} />
 
-        </section>
+            <OffensiveCoverage offensiveCoverage={analysisResult.offensiveCoverage} />
+          </section>
+
+          <DefensiveAnalysis defensiveAnalysis={analysisResult.defensiveAnalysis} />
+        </>
       )}
     </main>
   );

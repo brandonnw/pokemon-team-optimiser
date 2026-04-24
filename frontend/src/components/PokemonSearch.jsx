@@ -5,15 +5,15 @@ function PokemonSearch({
   loadingPokemon
 }) {
   return (
-    <form onSubmit={onAddPokemon}>
+    <form className="search-form" onSubmit={onAddPokemon}>
       <input
+        className="input"
         value={searchTerm}
         onChange={(event) => setSearchTerm(event.target.value)}
         placeholder="Search Pokémon e.g. pikachu"
-        style={{ padding: "0.6rem", marginRight: "0.5rem" }}
       />
 
-      <button type="submit" disabled={loadingPokemon}>
+      <button className="button" type="submit" disabled={loadingPokemon}>
         {loadingPokemon ? "Adding..." : "Add Pokémon"}
       </button>
     </form>

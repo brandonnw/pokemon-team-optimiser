@@ -1,31 +1,20 @@
 function RecommendationList({ recommendations }) {
-  if (!recommendations || recommendations.length === 0) {
-    return <p>No major issues found. Your team looks fairly balanced.</p>;
-  }
-
   return (
-    <section>
+    <section className="card">
       <h2>Recommendations</h2>
 
-      <div>
-        {recommendations.map((recommendation, index) => (
-          <div
-            key={index}
-            style={{
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-              padding: "1rem",
-              marginBottom: "1rem",
-              background: "#fafafa"
-            }}
-          >
+      {!recommendations || recommendations.length === 0 ? (
+        <p className="empty-text">No major issues found. Your team looks balanced.</p>
+      ) : (
+        recommendations.map((recommendation, index) => (
+          <div key={index} className="analysis-card info-card">
             <p>
               <strong>{recommendation.issue}</strong>
             </p>
             <p>{recommendation.suggestion}</p>
           </div>
-        ))}
-      </div>
+        ))
+      )}
     </section>
   );
 }

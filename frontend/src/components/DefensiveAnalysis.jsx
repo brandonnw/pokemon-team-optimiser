@@ -1,47 +1,88 @@
+function getSeverity(item) {
+  const hasSevereWeakness = item.weakPokemon.some(
+    (pokemon) => pokemon.multiplier >= 4
+  );
+
+  if (hasSevereWeakness || item.weakCount >= 3) {
+    return "severe";
+  }
+
+  if (item.weakCount >= 2) {
+    return "moderate";
+  }
+
+  return "low";
+}
+
 function DefensiveAnalysis({ defensiveAnalysis }) {
   if (!defensiveAnalysis) return null;
 
   const mainWeaknesses = defensiveAnalysis
     .filter((item) => item.weakCount > 0)
-    .sort((a, b) => b.weakCount - a.weakCount)
-    .slice(0, 5);
+    .sort((a, b) => {
+      const maxA = Math.max(...a.weakPokemon.map((p) => p.multiplier));
+      const maxB = Math.max(...b.weakPokemon.map((p) => p.multiplier));
+
+      if (maxB !== maxA) return maxB - maxA;
+      return b.weakCount - a.weakCount;
+    })
+    .slice(0, 6);
 
   return (
-    <section>
-      <h2>Top Defensive Weaknesses</h2>
+    <section className="card">
+      <div className="section-header">
+        <div>
+          <p className="section-kicker">Defensive Profile</p>
+          <h2>Top Defensive Weaknesses</h2>
+        </div>
+      </div>
 
       {mainWeaknesses.length === 0 ? (
-        <p>No major defensive weaknesses found.</p>
+        <p className="empty-text">No major defensive weaknesses found.</p>
       ) : (
-        <div>
-          {mainWeaknesses.map((item) => (
-            <div
-              key={item.attackingType}
-              style={{
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-                padding: "1rem",
-                marginBottom: "1rem",
-                background: "#fff7f7"
-              }}
-            >
-              <h3>{item.attackingType.toUpperCase()}</h3>
-              <p>
-                {item.weakCount} Pokémon weak, {item.resistCount} resist,{" "}
-                {item.immuneCount} immune
-              </p>
+        <div className="insight-grid">
+          {mainWeaknesses.map((item) => {
+            const severity = getSeverity(item);
 
-              {item.weakPokemon.length > 0 && (
-                <ul>
+            return (
+              <article
+                key={item.attackingType}
+                className={`type-insight-card type-glow-${item.attackingType}`}
+              >
+                <div className="insight-top-row">
+                  <div>
+                    <span className="type-label">{item.attackingType}</span>
+                    <h3>{item.attackingType.toUpperCase()}</h3>
+                  </div>
+
+                  <span className={`severity-pill severity-${severity}`}>
+                    {severity}
+                  </span>
+                </div>
+
+                <div className="mini-stat-row">
+                  <span>{item.weakCount} weak</span>
+                  <span>{item.resistCount} resist</span>
+                  <span>{item.immuneCount} immune</span>
+                </div>
+
+                <div className="pokemon-chip-list">
                   {item.weakPokemon.map((pokemon) => (
-                    <li key={pokemon.name}>
-                      {pokemon.name} — {pokemon.multiplier}x damage
-                    </li>
+                    <span
+                      key={pokemon.name}
+                      className={
+                        pokemon.multiplier >= 4
+                          ? "pokemon-chip danger-chip"
+                          : "pokemon-chip"
+                      }
+                    >
+                      {pokemon.name} · {pokemon.multiplier}x
+                    </span>
                   ))}
-                </ul>
-              )}
-            </div>
-          ))}
+                </div>
+              </article>
+            );
+          })}
         </div>
       )}
     </section>

@@ -1,31 +1,33 @@
 function TeamList({ team, onRemovePokemon }) {
   if (team.length === 0) {
-    return <p>No Pokémon added yet.</p>;
+    return <p className="empty-text">No Pokémon added yet.</p>;
   }
 
   return (
-    <ul>
+    <div className="team-grid">
       {team.map((pokemon) => (
-        <li key={pokemon.id} style={{ marginBottom: "1rem" }}>
-          {pokemon.sprite && (
-            <img
-              src={pokemon.sprite}
-              alt={pokemon.name}
-              style={{ verticalAlign: "middle", marginRight: "0.5rem" }}
-            />
-          )}
+        <div key={pokemon.id} className="pokemon-card">
+          {pokemon.sprite && <img src={pokemon.sprite} alt={pokemon.name} />}
 
-          <strong>{pokemon.name}</strong> — {pokemon.types.join(", ")}
+          <h3>{pokemon.name}</h3>
+
+          <div>
+            {pokemon.types.map((type) => (
+              <span key={type} className="type-badge">
+                {type}
+              </span>
+            ))}
+          </div>
 
           <button
+            className="remove-button"
             onClick={() => onRemovePokemon(pokemon.id)}
-            style={{ marginLeft: "1rem" }}
           >
             Remove
           </button>
-        </li>
+        </div>
       ))}
-    </ul>
+    </div>
   );
 }
 
