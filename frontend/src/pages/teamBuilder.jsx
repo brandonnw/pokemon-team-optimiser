@@ -6,7 +6,7 @@ import TeamList from "../components/TeamList";
 import RecommendationList from "../components/RecommendationList";
 import DefensiveAnalysis from "../components/DefensiveAnalysis";
 import OffensiveCoverage from "../components/OffensiveCoverage";
-import AiSummaryCard from "../components/AiSummaryCard";
+import PokemonRecommendations from "../components/PokemonRecommendations";
 
 function TeamBuilder() {
   const [team, setTeam] = useState([]);
@@ -15,6 +15,7 @@ function TeamBuilder() {
   const [loadingPokemon, setLoadingPokemon] = useState(false);
   const [loadingAnalysis, setLoadingAnalysis] = useState(false);
   const [aiSummary, setAiSummary] = useState(null);
+  const [pokemonRecommendations, setPokemonRecommendations] = useState([]);
   const [error, setError] = useState("");
 
   async function handleAddPokemon(event) {
@@ -42,6 +43,7 @@ function TeamBuilder() {
       setSearchTerm("");
       setAnalysisResult(null);
       setAiSummary(null);
+      setPokemonRecommendations([]);
     } catch (error) {
       setError("Could not find that Pokémon. Try names like pikachu or charizard.");
     } finally {
@@ -53,6 +55,7 @@ function TeamBuilder() {
     setTeam(team.filter((pokemon) => pokemon.id !== id));
     setAnalysisResult(null);
     setAiSummary(null);
+    setPokemonRecommendations([]);
   }
 
   async function handleAnalyzeTeam() {
@@ -72,6 +75,7 @@ function TeamBuilder() {
 
       const data = await analyzeTeam(cleanTeam);
       setAnalysisResult(data.analysis);
+      setPokemonRecommendations(data.pokemonRecommendations || []);
       setAiSummary(data.aiSummary);
     } catch (error) {
       console.error(error);
@@ -87,8 +91,8 @@ function TeamBuilder() {
         <div className="hero-badge">Battle Balance Dashboard</div>
         <h1>Build smarter Pokémon teams with data-driven analysis.</h1>
         <p>
-          Search Pokémon, build a team of up to six, and analyse defensive weaknesses,
-          resistances, immunities, and offensive coverage in one clean dashboard.
+          Search Pokémon, build a team of up to six, analyse defensive weaknesses, offensive coverage,
+          resistances, immunities, and received customised recommendations.
         </p>
       </section>
 
@@ -131,6 +135,7 @@ function TeamBuilder() {
           </section>
 
           <DefensiveAnalysis defensiveAnalysis={analysisResult.defensiveAnalysis} />
+          <PokemonRecommendations recommendations={pokemonRecommendations} />
         </>
       )}
     </main>

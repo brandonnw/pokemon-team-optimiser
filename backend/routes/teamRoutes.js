@@ -1,6 +1,7 @@
 import express from "express";
 import { analyseTeam } from "../logic/analyseTeam.js";
 import { generateTeamSummary } from "../logic/aiSummary.js";
+import { recommendPokemon } from "../logic/recommendPokemon.js";
 
 const router = express.Router();
 
@@ -12,6 +13,7 @@ router.post("/analyze", async (req, res) => {
   }
 
   const analysis = analyseTeam(team);
+  const pokemonRecommendations = await recommendPokemon(team, analysis);
 
   let aiSummary = null;
 
@@ -27,6 +29,7 @@ router.post("/analyze", async (req, res) => {
   res.json({
     team,
     analysis,
+    pokemonRecommendations,
     aiSummary
   });
 });
