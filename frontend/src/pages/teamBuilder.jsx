@@ -7,6 +7,8 @@ import RecommendationList from "../components/RecommendationList";
 import DefensiveAnalysis from "../components/DefensiveAnalysis";
 import OffensiveCoverage from "../components/OffensiveCoverage";
 import PokemonRecommendations from "../components/PokemonRecommendations";
+import { useAuth } from "../context/AuthContext";
+import { saveTeam } from "../api/savedTeamApi";
 
 function TeamBuilder() {
   const [team, setTeam] = useState([]);
@@ -17,6 +19,7 @@ function TeamBuilder() {
   const [aiSummary, setAiSummary] = useState(null);
   const [pokemonRecommendations, setPokemonRecommendations] = useState([]);
   const [error, setError] = useState("");
+  const { token, isAuthenticated } = useAuth();
 
   async function handleAddPokemon(event) {
     event.preventDefault();
@@ -85,6 +88,37 @@ function TeamBuilder() {
     }
   }
 
+  async function handleSaveTeam() {
+    if (!isAuthenticated) {
+      setError("Please login before saving a team.");
+      return;
+    }
+
+    if (team.length === 0) {
+      setError("Add at least one Pokémon before saving.");
+      return;
+    }
+
+    try {
+      setError("");
+
+      const teamName = prompt("Enter a name for this team:");
+
+      if (!teamName) return;
+
+      await saveTeam(token, {
+        teamName,
+        pokemon: team,
+        analysis: analysisResult
+      });
+
+      alert("Team saved successfully");
+    } catch (error) {
+      console.error(error);
+      setError("Failed to save team.");
+    }
+  }
+
   return (
     <main className="app-container">
       <section className="hero">
@@ -120,6 +154,9 @@ function TeamBuilder() {
           disabled={loadingAnalysis}
         >
           {loadingAnalysis ? "Analysing..." : "Analyse Team"}
+        </button>
+        <button className="button secondary-button" onClick={handleSaveTeam}>
+          Save Team
         </button>
       </section>
 

@@ -1031,3 +1031,132 @@ body::after {
     padding: 14px 16px;
   }
 }
+
+.navbar {
+  position: sticky;
+  top: 18px;
+  z-index: 50;
+  max-width: 1180px;
+  margin: 18px auto 0;
+  padding: 14px 18px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 22px;
+  align-items: center;
+  border-radius: 22px;
+  background: rgba(15, 23, 42, 0.78);
+  border: 1px solid rgba(147, 197, 253, 0.22);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+}
+
+.navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #f8fafc;
+  font-weight: 900;
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.navbar-logo {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: rgba(96, 165, 250, 0.16);
+  border: 1px solid rgba(147, 197, 253, 0.28);
+  color: #bfdbfe;
+}
+
+.navbar-links,
+.navbar-auth {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar-links {
+  justify-content: center;
+}
+
+.nav-link {
+  color: #94a3b8;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #bae6fd;
+}
+
+.navbar-user {
+  color: #cbd5e1;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.nav-button {
+  padding: 9px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(125, 211, 252, 0.42);
+  background: rgba(14, 165, 233, 0.16);
+  color: #bae6fd;
+  text-decoration: none;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.nav-button:hover {
+  background: rgba(14, 165, 233, 0.26);
+}
+
+@media (max-width: 850px) {
+  .navbar {
+    grid-template-columns: 1fr;
+    margin: 12px;
+  }
+
+  .navbar-links,
+  .navbar-auth {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+}
+
+.secondary-button {
+  margin-left: 12px;
+  background: rgba(14, 165, 233, 0.16);
+  border: 1px solid rgba(125, 211, 252, 0.42);
+  color: #bae6fd;
+  box-shadow: none;
+}
+
+.secondary-button:hover {
+  background: rgba(14, 165, 233, 0.26);
+}
+
+.saved-teams-grid {
+  display: grid;
+  gap: 24px;
+}
+
+.saved-team-card {
+  padding: 24px;
+  border-radius: 24px;
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(147, 197, 253, 0.22);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
+}
+
+.saved-team-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 20px;
+}
