@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import teamRoutes from "./routes/teamRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import savedTeamRoutes from "./routes/savedTeamRoutes.js";
 import { connectDB } from "./config/db.js";
 
 const app = express();
@@ -21,6 +22,7 @@ app.get("/api/health", (req, res) => {
 
 app.use("/api/team", teamRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/saved-teams", savedTeamRoutes);
 
 connectDB().then(() => {
   app.listen(PORT, () => {
